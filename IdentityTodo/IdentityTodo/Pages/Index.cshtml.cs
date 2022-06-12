@@ -69,4 +69,15 @@ public class IndexModel : PageModel
         }
         return RedirectToPage(new { ShowComplete });
     }
+
+    public async Task<IActionResult> OnPostDeleteItem(long id)
+    {
+        TodoItem item = _context.ToDoItems.Find(id);
+        if(item != null)
+        {
+            _context.Remove(item);
+            await _context.SaveChangesAsync();
+        }
+        return RedirectToPage(new { ShowComplete });
+    }
 }
