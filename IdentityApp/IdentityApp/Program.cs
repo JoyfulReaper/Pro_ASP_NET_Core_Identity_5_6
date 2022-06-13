@@ -33,9 +33,24 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddScoped<IEmailSender, ConsoleEmailSender>();
 
 // Start add Identity
-builder.Services.AddDefaultIdentity<IdentityUser>()
+builder.Services.AddDefaultIdentity<IdentityUser>(opts =>
+{
+    opts.Password.RequiredLength = 8;
+    opts.Password.RequireDigit = false;
+    opts.Password.RequireLowercase = false;
+    opts.Password.RequireUppercase = false;
+    opts.Password.RequireNonAlphanumeric = false;
+    opts.SignIn.RequireConfirmedAccount = true;
+})
     .AddEntityFrameworkStores<IdentityDbContext>();
 // End add Identity
+
+builder.Services.AddAuthentication()
+    .AddGoogle(opts =>
+    {
+        opts.ClientId = builder.Configuration["Google:ClientId"];
+        opts.ClientSecret = builder.Configuration["Google:ClientSecret"];
+    });
 
 var app = builder.Build();
 
