@@ -32,7 +32,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddScoped<IEmailSender, ConsoleEmailSender>();
 
 // Start add Identity
-builder.Services.AddDefaultIdentity<IdentityUser>(opts =>
+//builder.Services.AddDefaultIdentity<IdentityUser>(opts =>
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(opts =>
 {
     opts.Password.RequiredLength = 8;
     opts.Password.RequireDigit = false;
