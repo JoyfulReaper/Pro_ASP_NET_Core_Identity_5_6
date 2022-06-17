@@ -47,7 +47,11 @@ namespace IdentityApp.Pages.Identity.Admin
                 };
 
                 IdentityResult result = await _userManager.CreateAsync(userObject);
-                result.Process(ModelState);
+                if(result.Process(ModelState))
+                {
+                    result = await _userManager.AddPasswordAsync(userObject, "mysecret");
+                    result.Process(ModelState);
+                }
             }
 
             if (ModelState.IsValid)
