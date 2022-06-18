@@ -42,8 +42,12 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(opts =>
     opts.Password.RequireNonAlphanumeric = false;
     opts.SignIn.RequireConfirmedAccount = true;
 })
-    .AddEntityFrameworkStores<IdentityDbContext>();
+    .AddEntityFrameworkStores<IdentityDbContext>()
+    .AddDefaultTokenProviders();
 // End add Identity
+
+builder.Services.AddScoped<TokenUrlEncoderService>();
+builder.Services.AddScoped<IdentityEmailService>();
 
 builder.Services.AddAuthentication()
     .AddGoogle(opts =>

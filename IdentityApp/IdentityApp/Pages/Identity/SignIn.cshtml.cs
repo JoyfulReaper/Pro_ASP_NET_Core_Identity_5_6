@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -6,6 +7,7 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace IdentityApp.Pages.Identity;
 
+[AllowAnonymous]
 public class SignInModel : UserPageModel
 {
     private readonly SignInManager<IdentityUser> _signInManager;
