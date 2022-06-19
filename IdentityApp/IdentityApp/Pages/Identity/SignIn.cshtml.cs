@@ -11,6 +11,7 @@ namespace IdentityApp.Pages.Identity;
 public class SignInModel : UserPageModel
 {
     private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<IdentityUser> _userManager;
 
     [Required]
     [EmailAddress]
@@ -24,9 +25,11 @@ public class SignInModel : UserPageModel
     [BindProperty(SupportsGet = true)]
     public string? ReturnUrl { get; set; }
 
-    public SignInModel(SignInManager<IdentityUser> signInManager)
+    public SignInModel(SignInManager<IdentityUser> signInManager,
+        UserManager<IdentityUser> userManager)
     {
         _signInManager = signInManager;
+        _userManager = userManager;
     }
 
     public async Task<IActionResult> OnPostAsync()
@@ -46,7 +49,12 @@ public class SignInModel : UserPageModel
             }
             else if (result.IsNotAllowed)
             {
-                TempData["message"] = "Sign in not allowed";
+                IdentityUser user = await _userManager.FindByEmailAsync(Email);
+                if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
+                {
+                    return RedirectToPage("SignUpConfirm");
+                }
+                TempData["message"] = "Sign In Not Allowed";
             }
             else if (result.RequiresTwoFactor)
             {

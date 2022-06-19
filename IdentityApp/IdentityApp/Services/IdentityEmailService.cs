@@ -32,7 +32,15 @@ public class IdentityEmailService
         await _emailSender.SendEmailAsync(user.Email, "Set Your Password",
             $"Please set your password by clicking <a href='{url}'>here</a>.");
     }
-        
+
+    public async Task SendAccountConfirmationEmail(IdentityUser user, string confirmationPage)
+    {
+        string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        string url = GetUrl(user.Email, token, confirmationPage);
+        await _emailSender.SendEmailAsync(user.Email, "Complete Your Account Setup",
+            $"Please confirm your account by clicking <a href='{url}'>here</a>.");
+    }
+
     private string GetUrl(string emailAddress, string token, string page)
     {
         string safeToken = _encoder.EncodeToken(token);
