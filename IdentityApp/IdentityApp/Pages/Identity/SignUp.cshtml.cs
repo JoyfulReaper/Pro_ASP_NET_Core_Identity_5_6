@@ -1,4 +1,5 @@
 using IdentityApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -6,7 +7,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IdentityApp.Pages.Identity
 {
-    public class SignUpModel : PageModel
+    [AllowAnonymous]
+    public class SignUpModel : UserPageModel
     {
         [BindProperty]
         [Required]

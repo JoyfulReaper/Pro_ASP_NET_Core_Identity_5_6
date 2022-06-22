@@ -13,13 +13,17 @@ namespace IdentityApp.Pages.Identity.Admin
         public int UsersLockedout { get; set; } = 0;
         public int UsersTwoFactor { get; set; } = 0;
 
+        public string DashboardRole { get; set; }
+
         private readonly string[] emails = {
             "alice@example.com", "bob@example.com", "charlie@example.com"
         };
 
-        public DashboardModel(UserManager<IdentityUser> userManager)
+        public DashboardModel(UserManager<IdentityUser> userManager,
+            IConfiguration configuration)
         {
             _userManager = userManager;
+            DashboardRole = configuration["Dashboard:Role"] ?? "Dashboard";
         }
 
         public void OnGet()
@@ -38,8 +42,12 @@ namespace IdentityApp.Pages.Identity.Admin
             // This ensures I don’t cause an error by deleting objects from the sequence that I am enumerating.
             foreach (IdentityUser existingUser in _userManager.Users.ToList())
             {
-                IdentityResult result = await _userManager.DeleteAsync(existingUser);
-                result.Process(ModelState);
+                if (emails.Contains(existingUser.Email) ||
+                    !await _userManager.IsInRoleAsync(existingUser, DashboardRole))
+                {
+                    IdentityResult result = await _userManager.DeleteAsync(existingUser);
+                    result.Process(ModelState);
+                }
             }
             
             foreach (string email in emails)

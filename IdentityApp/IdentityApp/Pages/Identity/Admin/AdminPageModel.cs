@@ -2,7 +2,8 @@
 
 namespace IdentityApp.Pages.Identity.Admin;
 
-[AllowAnonymous]
+//[AllowAnonymous]
+[Authorize(Roles = "Dashboard")]
 public class AdminPageModel : UserPageModel
 {
 }

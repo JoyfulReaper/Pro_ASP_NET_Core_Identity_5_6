@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IdentityApp.Pages.Identity.Admin
 {
-    public class PasswordsModel : PageModel
+    public class PasswordsModel : AdminPageModel
     {
         public UserManager<IdentityUser> UserManager { get; set; }
         private readonly IdentityEmailService _emailService;

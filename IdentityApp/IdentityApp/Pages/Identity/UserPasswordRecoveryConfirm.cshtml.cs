@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 namespace IdentityApp.Pages.Identity;
 
 [AllowAnonymous]
-public class UserPasswordRecoveryConfirmModel : PageModel
+public class UserPasswordRecoveryConfirmModel : UserPageModel
 {
     [BindProperty(SupportsGet = true)]
     public string Email { get; set; }

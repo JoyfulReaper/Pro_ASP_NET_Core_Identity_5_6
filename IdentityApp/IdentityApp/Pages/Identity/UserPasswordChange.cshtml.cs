@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace IdentityApp.Pages.Identity
 {
-    public class UserPasswordChangeModel : PageModel
+    public class UserPasswordChangeModel : UserPageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
 

@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 namespace IdentityApp.Pages.Identity
 {
     [AllowAnonymous]
-    public class UserPasswordRecoveryModel : PageModel
+    public class UserPasswordRecoveryModel : UserPageModel
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IdentityEmailService _emailService;

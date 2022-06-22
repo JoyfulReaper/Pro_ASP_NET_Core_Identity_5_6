@@ -1,3 +1,4 @@
+using IdentityApp;
 using IdentityApp.Models;
 using IdentityApp.Services;
 using Microsoft.AspNetCore.Identity;
@@ -82,5 +83,8 @@ app.UseEndpoints(endpoints =>
     endpoints.MapDefaultControllerRoute();
     endpoints.MapRazorPages();
 });
+
+// seed the user store
+app.SeedUserStoreForDashboard();
 
 app.Run();
