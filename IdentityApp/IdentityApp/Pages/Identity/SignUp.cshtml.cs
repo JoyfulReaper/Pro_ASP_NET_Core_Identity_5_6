@@ -1,4 +1,5 @@
 using IdentityApp.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,16 +20,26 @@ namespace IdentityApp.Pages.Identity
         [Required]
         public string Password { get; set; }
 
+        public IEnumerable<AuthenticationScheme> ExternalSchemes { get; set; }
+
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IdentityEmailService _emailService;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         public SignUpModel(UserManager<IdentityUser> userManager,
-            IdentityEmailService emailService)
+            IdentityEmailService emailService,
+            SignInManager<IdentityUser> signInManager)
         {
             _userManager = userManager;
             _emailService = emailService;
+            _signInManager = signInManager;
         }
 
+        public async Task OnGetAsync()
+        {
+            ExternalSchemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
+        }
+        
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
