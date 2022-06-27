@@ -67,6 +67,18 @@ builder.Services.ConfigureApplicationCookie(opts =>
     opts.LoginPath = "/Identity/SignIn";
     opts.LogoutPath = "/Identity/SignOut";
     opts.AccessDeniedPath = "/Identity/Forbidden";
+    opts.Events.DisableRedirectionForApiClients();
+});
+
+builder.Services.AddCors(opts =>
+{
+    opts.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("https://localhost:5100")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
 });
 
 var app = builder.Build();
@@ -75,6 +87,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
