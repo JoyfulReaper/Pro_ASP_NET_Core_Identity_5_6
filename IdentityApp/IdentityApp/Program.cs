@@ -1,10 +1,13 @@
 using IdentityApp;
 using IdentityApp.Models;
 using IdentityApp.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -60,6 +63,13 @@ builder.Services.AddAuthentication()
     {
         opts.ClientId = builder.Configuration["Google:ClientId"];
         opts.ClientSecret = builder.Configuration["Google:ClientSecret"];
+    }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opts =>
+    {
+        opts.TokenValidationParameters.ValidateAudience = false;
+        opts.TokenValidationParameters.ValidateIssuer = false;
+        opts.TokenValidationParameters.IssuerSigningKey
+            = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+                builder.Configuration["BearerTokens:Key"]));
     });
 
 builder.Services.ConfigureApplicationCookie(opts =>
@@ -68,6 +78,7 @@ builder.Services.ConfigureApplicationCookie(opts =>
     opts.LogoutPath = "/Identity/SignOut";
     opts.AccessDeniedPath = "/Identity/Forbidden";
     opts.Events.DisableRedirectionForApiClients();
+    opts.Cookie.SameSite = SameSiteMode.None;
 });
 
 builder.Services.AddCors(opts =>
